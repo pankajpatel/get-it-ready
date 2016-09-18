@@ -19,5 +19,10 @@
   "bugs": {
     "url": "https://github.com/pankajpatel/get-it-ready/issues"
   },
-  "homepage": "https://github.com/pankajpatel/get-it-ready#readme"
+  "homepage": "https://github.com/pankajpatel/get-it-ready#readme",
+  "dependencies": {
+    "boom": "^4.0.0",
+    "joi": "^9.0.4",
+    "mongoose": "^4.6.0"
+  }
 }
