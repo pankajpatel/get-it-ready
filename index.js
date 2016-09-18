@@ -14,6 +14,13 @@ function decorate(schemaDefination, routeBaseName, modelName, singularRouteName)
     model = getModel(schema);
     controller = getController(model);
     routes = getRoutes(controller);
+
+    return {
+        schema: schema,
+        model: model,
+        controller: controller,
+        routes: routes
+    }
 }
 
 function getController(model){
