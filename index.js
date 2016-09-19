@@ -12,7 +12,7 @@ function decorate(schemaDefination, routeBaseName, modelName, singularRouteName)
 
     schema = getSchema(schemaDefination);
     model = getModel(schema);
-    controller = getController(model);
+    controller = getController(model, routeBaseName);
     routes = getRoutes(controller);
 
     return {
@@ -21,6 +21,10 @@ function decorate(schemaDefination, routeBaseName, modelName, singularRouteName)
         controller: controller,
         routes: routes
     }
+}
+
+function getJoiValidationObject(config){
+    
 }
 
 function getController(model){
@@ -72,7 +76,7 @@ function getController(model){
                   reply(data).created('/' + data._id); // HTTP 201
                 } else {
                   if (11000 === err.code || 11001 === err.code) {
-                    reply(Boom.forbidden("please provide another student id, it already exist"));
+                    reply(Boom.forbidden('please provide another ' + singularRouteName + ' id, it already exist'));
                   } else reply(Boom.forbidden(getErrorMessageFrom(err))); // HTTP 403
                 }
               });
@@ -99,7 +103,7 @@ function getController(model){
                                 reply(data).updated('/' + data._id); // HTTP 201
                             } else {
                                 if (11000 === err.code || 11001 === err.code) {
-                                    reply(Boom.forbidden("please provide another student id, it already exist"));
+                                    reply(Boom.forbidden('please provide another ' + singularRouteName + ' id, it already exist'));
                                 } else reply(Boom.forbidden(getErrorMessageFrom(err))); // HTTP 403
                             }
                         });
@@ -117,13 +121,13 @@ function getController(model){
                     if (!err && dbObject) {
                         dbObject.remove();
                         reply({
-                            message: "Student deleted successfully"
+                            message: singularRouteName + ' deleted successfully'
                         });
                     } else if (!err) {
                         // Couldn't find the object.
                         reply(Boom.notFound());
                     } else {
-                        reply(Boom.badRequest("Could not delete student"));
+                        reply(Boom.badRequest('Could not delete ' + singularRouteName));
                     }
                 });
             }
@@ -132,46 +136,46 @@ function getController(model){
     return controller;
 }
 
-function getRoutes(controller){
+function getRoutes(controller, routeBaseName){
     var routes = [
       {
         method : 'GET',
-        path : '/' + baseName,
+        path : '/' + routeBaseName,
         config: {
-          description: 'Get all Students',
-          notes: 'Returns a list of students ordered by addition date',
-          tags: ['api', 'students'],
+          description: 'Get all ' + routeBaseName + '',
+          notes: 'Returns a list of ' + routeBaseName + ' ordered by addition date',
+          tags: ['api', routeBaseName],
         },
         handler : controller.getAll.handler
       },
       {
         method : 'GET',
-        path : '/' + baseName + '/{id}',
+        path : '/' + routeBaseName + '/{id}',
         config: {
-          description: 'Get Student by DB Id',
-          notes: 'Returns the student object if matched with the DB id',
-          tags: ['api', 'students'],
+          description: 'Get ' + singularRouteName + ' by DB Id',
+          notes: 'Returns the ' + singularRouteName + ' object if matched with the DB id',
+          tags: ['api', routeBaseName],
         },
         handler : controller.getOne.handler
       },
       {
         method : 'DELETE',
-        path : '/' + baseName + '/{id}',
+        path : '/' + routeBaseName + '/{id}',
         config: {
-          description: 'Delete Student',
-          notes: 'Returns the student deletion status',
-          tags: ['api', 'students'],
+          description: 'Delete ' + singularRouteName,
+          notes: 'Returns the ' + singularRouteName + ' deletion status',
+          tags: ['api', routeBaseName],
         },
         handler : controller.remove.handler
       },
       {
         method : 'POST',
-        path : '/' + baseName,
+        path : '/' + routeBaseName,
         config: {
-          validate: Students.create.validate,
-          description: 'Add a student',
+          validate: controller.create.validate,
+          description: 'Add a ' + singularRouteName,
           notes: 'Returns a todo item by the id passed in the path',
-          tags: ['api', 'students'],
+          tags: ['api', routeBaseName],
         },
         handler : controller.create.handler
       }
