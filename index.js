@@ -1,3 +1,5 @@
+'use strict';
+
 var Mongoose = require('mongoose');
 var Joi = require('joi');
 var Boom = require('boom');
@@ -6,6 +8,8 @@ var Schema = Mongoose.Schema;
 var ObjectID = Schema.ObjectId;
 
 /**
+ * @function
+ * @name decorate
  * @param  {object} schemaDefinitionObject The Schema definition object
  * @param  {string} routeBaseName Route base in plurals
  * @param  {string} modelName Model name
@@ -13,6 +17,23 @@ var ObjectID = Schema.ObjectId;
  * @return {object} Collection object containing ingredients of REST
  */
 function decorate(schemaDefination, routeBaseName, modelName, singularRouteName){
+
+  if( schemaDefination === undefined ){
+    throw new Error('Schema Defination is required');
+  }
+
+  if( routeBaseName === undefined ){
+    throw new Error('Route Base Name is required');
+  }
+
+  if( modelName === undefined ){
+    throw new Error('Model Name is required');
+  }
+
+  if( singularRouteName === undefined ){
+    throw new Error('Singular Model\'s Route Name is required');
+  }
+
   var validations = {}
   var schema = null;
   var model = null;
@@ -40,6 +61,8 @@ function decorate(schemaDefination, routeBaseName, modelName, singularRouteName)
  * The Joi object will be used for both POST and PUT
  * only difference will be of required() in various keys among them
  *
+ * @function
+ * @name separateJoiValidationObject
  * @param  {object} config The Schema Config object
  * @return {object}
  */
@@ -72,6 +95,8 @@ function separateJoiValidationObject(config){
 }
 
 /**
+ * @function
+ * @name getController
  * @param  {object} model The Mongoose model object
  * @param  {object} joiValidationObject The Joi validation objects
  * @return {object} object containing controller methods
@@ -179,6 +204,8 @@ function getController(model, joiValidationObject){
 }
 
 /**
+ * @function
+ * @name getRoutes
  * @param  {object} controller The object containing controller methods
  * @param  {string} routeBaseName The string which should be used for routebase
  * @param  {string} singularRouteName The singular entity name for routes
@@ -243,6 +270,8 @@ function getRoutes(controller, routeBaseName, singularRouteName){
 }
 
 /**
+ * @function
+ * @name getModel
  * @param  {object} schema The Mongoose Schema object
  * @return {object} model The Mongoose model
  */
@@ -251,6 +280,8 @@ function getModel(schema){
 }
 
 /**
+ * @function
+ * @name getSchema
  * @param  {object} schema definition object
  * @return {object} mongoose schema
  */
