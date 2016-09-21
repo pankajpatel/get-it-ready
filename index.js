@@ -6,22 +6,24 @@ var Schema = Mongoose.Schema;
 var ObjectID = Schema.ObjectId;
 
 /**
- * @param  {object} schema definition object
- * @param  {string} route base in plurals
- * @param  {string} model name
- * @param  {string} route base in singular
- * @return {object} collection object containing ingredients of REST
+ * @param  {object} schemaDefinitionObject The Schema definition object
+ * @param  {string} routeBaseName Route base in plurals
+ * @param  {string} modelName Model name
+ * @param  {string} singularRouteName Route base in singular
+ * @return {object} Collection object containing ingredients of REST
  */
 function decorate(schemaDefination, routeBaseName, modelName, singularRouteName){
+  var validations = {}
   var schema = null;
   var model = null;
   var controller = {};
   var routes = [];
 
-  schema = getSchema(schemaDefination);
+  validations = separateJoiValidationObject(schemaDefination);
+  schema = getSchema(validations.schema);
   model = getModel(schema);
-  controller = getController(model, routeBaseName);
-  routes = getRoutes(controller);
+  controller = getController(model, validations);
+  routes = getRoutes(controller, routeBaseName, singularRouteName);
 
   return {
     schema: schema,
@@ -32,30 +34,46 @@ function decorate(schemaDefination, routeBaseName, modelName, singularRouteName)
 }
 
 /**
- * @param  {object}
- * @return {object}
- *
  * The model definition should have the Joi Definitions also
  * But not the required() method of Joi
  * because it will be added by this method
  * The Joi object will be used for both POST and PUT
  * only difference will be of required() in various keys among them
+ *
+ * @param  {object} config The Schema Config object
+ * @return {object}
  */
 function separateJoiValidationObject(config){
-  var object = {};
-  for (var prop in config) {
-    var itemConf = config[prop];
+  var post = {}, put = {};
+  var schema = Object.assign({}, config);
+  for (var prop in schema) {
+    var itemConf = schema[prop];
     if ( itemConf === null ) {
       throw new Error('Null configs are not supported!');
     }
-    var validation = itemConf.joi;
-
+    if( itemConf.joi ){
+      if( !itemConf.joi.isJoi ){
+        itemConf.joi = Joi.object(itemConf.joi);
+      }
+      put[prop] = itemConf.joi;
+      if( itemConf.required ){
+        post = itemConf.joi.required()
+      } else {
+        post = itemConf.joi;
+      }
+      delete schema[prop].joi;
+    }
+  }
+  return {
+    schema: schema,
+    post: post,
+    put: put
   }
 }
 
 /**
- * @param  {object} model
- * @param  {object} joiValidationObject
+ * @param  {object} model The Mongoose model object
+ * @param  {object} joiValidationObject The Joi validation objects
  * @return {object} object containing controller methods
  */
 function getController(model, joiValidationObject){
@@ -86,7 +104,7 @@ function getController(model, joiValidationObject){
     },
     create: {
       validate: {
-        payload: joiValidationObject
+        payload: joiValidationObject.post
       },
       handler: function(request, reply) {
         var payload = request.payload;
@@ -108,7 +126,7 @@ function getController(model, joiValidationObject){
     },
     update: {
       validate: {
-        payload: joiValidationObject
+        payload: joiValidationObject.put
       },
 
       handler: function(request, reply) {
@@ -161,11 +179,12 @@ function getController(model, joiValidationObject){
 }
 
 /**
- * @param  {object}
- * @param  {string}
- * @return {object}
+ * @param  {object} controller The object containing controller methods
+ * @param  {string} routeBaseName The string which should be used for routebase
+ * @param  {string} singularRouteName The singular entity name for routes
+ * @return {object} The routes object which can be plugged in hapijs or can be extended more
  */
-function getRoutes(controller, routeBaseName){
+function getRoutes(controller, routeBaseName, singularRouteName){
   var routes = [
     {
       method : 'GET',
@@ -224,8 +243,8 @@ function getRoutes(controller, routeBaseName){
 }
 
 /**
- * @param  {object} mongoose schema object
- * @return {object} mongoose model
+ * @param  {object} schema The Mongoose Schema object
+ * @return {object} model The Mongoose model
  */
 function getModel(schema){
   return model = Mongoose.model(modelName, schema);
