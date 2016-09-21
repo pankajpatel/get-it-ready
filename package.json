@@ -7,6 +7,9 @@
     "type": "git",
     "url": "git+https://github.com/pankajpatel/get-it-ready.git"
   },
+  "scripts": {
+    "test": "node_modules/tape/bin/tape test.js"
+  },
   "keywords": [
     "hapijs",
     "mongoose",
@@ -24,5 +27,8 @@
     "boom": "^4.0.0",
     "joi": "^9.0.4",
     "mongoose": "^4.6.0"
+  },
+  "devDependencies": {
+    "tape": "^4.6.0"
   }
 }
