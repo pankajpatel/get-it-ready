@@ -42,7 +42,7 @@ function decorate(schemaDefination, routeBaseName, modelName, singularRouteName)
 
   validations = separateJoiValidationObject(schemaDefination);
   schema = getSchema(validations.schema);
-  model = getModel(schema);
+  model = getModel(modelName, schema);
   controller = getController(model, validations);
   routes = getRoutes(controller, routeBaseName, singularRouteName);
 
@@ -272,11 +272,12 @@ function getRoutes(controller, routeBaseName, singularRouteName){
 /**
  * @function
  * @name getModel
+ * @param  {object} modelName The Mongoose Model name
  * @param  {object} schema The Mongoose Schema object
  * @return {object} model The Mongoose model
  */
-function getModel(schema){
-  return model = Mongoose.model(modelName, schema);
+function getModel(modelName, schema){
+  return Mongoose.model(modelName, schema);
 }
 
 /**
@@ -286,7 +287,7 @@ function getModel(schema){
  * @return {object} mongoose schema
  */
 function getSchema(definitionObject){
-  return schema = new Schema(definitionObject);
+  return new Schema(definitionObject);
 }
 
 module.exports = decorate;
