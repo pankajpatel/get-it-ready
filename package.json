@@ -8,7 +8,8 @@
     "url": "git+https://github.com/pankajpatel/get-it-ready.git"
   },
   "scripts": {
-    "test": "node_modules/tape/bin/tape test.js"
+    "test": "node_modules/tape/bin/tape test.js",
+    "report": "node_modules/tape/bin/tape test.js | node_modules/tap-summary/bin/cmd.js"
   },
   "keywords": [
     "hapijs",
@@ -29,6 +30,7 @@
     "mongoose": "^4.6.0"
   },
   "devDependencies": {
+    "tap-summary": "^3.0.1",
     "tape": "^4.6.0"
   }
 }
