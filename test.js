@@ -32,24 +32,26 @@ test('results', function (t) {
   t.deepEqual(
       Object.keys(result),
       ['schema', 'model', 'controller', 'routes'],
-      'Result should have the desired keys'
+      'Result should have keys: schema, model, controller, results'
     )
   t.end()
 })
 
 test('results.schema', function (t) {
-  t.equal(typeof result.schema, 'object')
+  t.equal(typeof result.schema, 'object', 'should be an object')
+  t.ok(result.schema instanceof Mongoose.Schema, 'should be the instanceof Mongoose.Schema')
   t.end()
 })
 
 test('results.model', function (t) {
-  t.equal(result.model.modelName, 'Person', 'Model name should be returned as expected')
+  t.ok(result.model, 'should exist')
+  t.equal(result.model.modelName, 'Person', 'should have the supplied model name')
   t.end()
 })
 
 test('results.controller', function (t) {
   // console.log( Object.keys( result.controller ) )
-  t.equal(typeof result.controller, 'object')
+  t.equal(typeof result.controller, 'object', 'should be an object')
   t.deepEqual(Object.keys(result.controller), [ 'getAll', 'getOne', 'create', 'update', 'remove' ])
   t.end()
 })
