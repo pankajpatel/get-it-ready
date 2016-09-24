@@ -57,10 +57,10 @@ function decorate(schemaDefination, routeBaseName, modelName, singularRouteName)
  * For Manual Control (If needed)
  */
 decorate.separateJoiValidationObject = separateJoiValidationObject;
+decorate.getSchema = getSchema;
+decorate.getModel = getModel;
 decorate.getController = getController;
 decorate.getRoutes = getRoutes;
-decorate.getModel = getModel;
-decorate.getSchema = getSchema;
 
 
 /**
@@ -89,9 +89,9 @@ function separateJoiValidationObject(config){
       }
       put[prop] = itemConf.joi;
       if( itemConf.required ){
-        post = itemConf.joi.required()
+        post[prop] = itemConf.joi.required()
       } else {
-        post = itemConf.joi;
+        post[prop] = itemConf.joi;
       }
       delete schema[prop].joi;
     }
@@ -281,7 +281,7 @@ function getRoutes(controller, routeBaseName, singularRouteName){
 /**
  * @function
  * @name getModel
- * @param  {object} modelName The Mongoose Model name
+ * @param  {string} modelName The Mongoose Model name
  * @param  {object} schema The Mongoose Schema object
  * @return {object} model The Mongoose model
  */

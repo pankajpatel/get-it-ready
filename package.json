@@ -8,6 +8,8 @@
     "url": "git+https://github.com/pankajpatel/get-it-ready.git"
   },
   "scripts": {
+    "watch": "nodemon --exec npm run test",
+    "watch-report": "nodemon --exec npm run report",
     "test": "node_modules/tape/bin/tape test.js",
     "report": "node_modules/tape/bin/tape test.js | node_modules/tap-summary/bin/cmd.js"
   },
