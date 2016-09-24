@@ -60,3 +60,12 @@ test('results.routes', function (t) {
   t.equal(typeof result.routes, 'object')
   t.end()
 })
+
+test('manual control', function (t) {
+  t.ok(getItReady.separateJoiValidationObject, 'should have separateJoiValidationObject method')
+  t.ok(getItReady.getController, 'should have getController method')
+  t.ok(getItReady.getRoutes, 'should have getRoutes method')
+  t.ok(getItReady.getModel, 'should have getModel method')
+  t.ok(getItReady.getSchema, 'should have getSchema method')
+  t.end();
+});

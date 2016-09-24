@@ -53,6 +53,15 @@ function decorate(schemaDefination, routeBaseName, modelName, singularRouteName)
     routes: routes
   }
 }
+/**
+ * For Manual Control (If needed)
+ */
+decorate.separateJoiValidationObject = separateJoiValidationObject;
+decorate.getController = getController;
+decorate.getRoutes = getRoutes;
+decorate.getModel = getModel;
+decorate.getSchema = getSchema;
+
 
 /**
  * The model definition should have the Joi Definitions also
