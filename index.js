@@ -37,19 +37,23 @@ function decorate(schemaDefination, routeBaseName, modelName, singularRouteName)
   var validations = {}
   var schema = null;
   var model = null;
-  var controller = {};
+  var controllers = {};
   var routes = [];
 
   validations = separateJoiValidationObject(schemaDefination);
   schema = getSchema(validations.schema);
   model = getModel(modelName, schema);
-  controller = getController(model, validations);
-  routes = getRoutes(controller, routeBaseName, singularRouteName);
+  controllers = getControllers(model, validations);
+  routes = getRoutes(controllers, routeBaseName, singularRouteName);
 
   return {
+    validations: {
+      post: validations.post,
+      put: validations.put
+    },
     schema: schema,
     model: model,
-    controller: controller,
+    controllers: controllers,
     routes: routes
   }
 }
@@ -59,7 +63,7 @@ function decorate(schemaDefination, routeBaseName, modelName, singularRouteName)
 decorate.separateJoiValidationObject = separateJoiValidationObject;
 decorate.getSchema = getSchema;
 decorate.getModel = getModel;
-decorate.getController = getController;
+decorate.getControllers = getControllers;
 decorate.getRoutes = getRoutes;
 
 
@@ -110,8 +114,8 @@ function separateJoiValidationObject(config){
  * @param  {object} joiValidationObject The Joi validation objects
  * @return {object} object containing controller methods
  */
-function getController(model, joiValidationObject){
-  var controller = {
+function getControllers(model, joiValidationObject){
+  var controllers = {
     getAll: {
       handler: function(request, reply) {
         model.find({}, function(err, data) {
@@ -209,18 +213,18 @@ function getController(model, joiValidationObject){
       }
     }
   };
-  return controller;
+  return controllers;
 }
 
 /**
  * @function
  * @name getRoutes
- * @param  {object} controller The object containing controller methods
+ * @param  {object} controllers The object containing controller methods
  * @param  {string} routeBaseName The string which should be used for routebase
  * @param  {string} singularRouteName The singular entity name for routes
  * @return {object} The routes object which can be plugged in hapijs or can be extended more
  */
-function getRoutes(controller, routeBaseName, singularRouteName){
+function getRoutes(controllers, routeBaseName, singularRouteName){
   var routes = [
     {
       method : 'GET',
@@ -230,7 +234,7 @@ function getRoutes(controller, routeBaseName, singularRouteName){
         notes: 'Returns a list of ' + routeBaseName + ' ordered by addition date',
         tags: ['api', routeBaseName],
       },
-      handler : controller.getAll.handler
+      handler : controllers.getAll.handler
     },
     {
       method : 'GET',
@@ -240,18 +244,18 @@ function getRoutes(controller, routeBaseName, singularRouteName){
         notes: 'Returns the ' + singularRouteName + ' object if matched with the DB id',
         tags: ['api', routeBaseName],
       },
-      handler : controller.getOne.handler
+      handler : controllers.getOne.handler
     },
     {
       method : 'PUT',
       path : '/' + routeBaseName + '/{id}',
       config: {
-        validate: controller.create.validate,
+        validate: controllers.create.validate,
         description: 'Add a ' + singularRouteName,
         notes: 'Returns a todo item by the id passed in the path',
         tags: ['api', routeBaseName],
       },
-      handler : controller.create.handler
+      handler : controllers.create.handler
     },
     {
       method : 'DELETE',
@@ -261,18 +265,18 @@ function getRoutes(controller, routeBaseName, singularRouteName){
         notes: 'Returns the ' + singularRouteName + ' deletion status',
         tags: ['api', routeBaseName],
       },
-      handler : controller.remove.handler
+      handler : controllers.remove.handler
     },
     {
       method : 'POST',
       path : '/' + routeBaseName,
       config: {
-        validate: controller.create.validate,
+        validate: controllers.create.validate,
         description: 'Add a ' + singularRouteName,
         notes: 'Returns a todo item by the id passed in the path',
         tags: ['api', routeBaseName],
       },
-      handler : controller.create.handler
+      handler : controllers.create.handler
     }
   ];
   return routes;

@@ -42,8 +42,8 @@ testWrapper('results', function (t) {
   t.equal(typeof result, 'object', 'Result should be an object')
   t.deepEqual(
       Object.keys(result),
-      ['schema', 'model', 'controller', 'routes'],
-      'Result should have keys: schema, model, controller, results'
+      ['validations', 'schema', 'model', 'controllers', 'routes'],
+      'Result should have keys: schema, model, controllers, results'
     )
   t.end()
 })
@@ -60,10 +60,10 @@ testWrapper('results.model', function (t) {
   t.end()
 })
 
-testWrapper('results.controller', function (t) {
-  // console.log( Object.keys( result.controller ) )
-  t.equal(typeof result.controller, 'object', 'should be an object')
-  t.deepEqual(Object.keys(result.controller), [ 'getAll', 'getOne', 'create', 'update', 'remove' ])
+testWrapper('results.controllers', function (t) {
+  // console.log( Object.keys( result.controllers ) )
+  t.equal(typeof result.controllers, 'object', 'should be an object')
+  t.deepEqual(Object.keys(result.controllers), [ 'getAll', 'getOne', 'create', 'update', 'remove' ])
   t.end()
 })
 
@@ -74,7 +74,7 @@ testWrapper('results.routes', function (t) {
 
 testWrapper('manual control', function (t) {
   t.ok(getItReady.separateJoiValidationObject, 'should have separateJoiValidationObject method')
-  t.ok(getItReady.getController, 'should have getController method')
+  t.ok(getItReady.getControllers, 'should have getControllers method')
   t.ok(getItReady.getRoutes, 'should have getRoutes method')
   t.ok(getItReady.getModel, 'should have getModel method')
   t.ok(getItReady.getSchema, 'should have getSchema method')
@@ -111,5 +111,38 @@ testWrapper('manual: getModel ', function (t) {
   } , 'should not throw error');
   t.ok(manual.getModel, 'should return a valid Model object');
   t.equal(manual.getModel.modelName, 'SchemaName', 'should have model name as specified');
+  t.end();
+});
+
+testWrapper('manual: getControllers ', function (t) {
+  t.doesNotThrow(function () {
+    manual.getControllers = getItReady.getControllers(manual.getModel, manual.separateJoiValidationObject);
+  } , 'should not throw error');
+  t.ok(manual.getControllers, 'should return controllers collection');
+  t.deepEqual(
+    Object.keys(manual.getControllers),
+    ['getAll', 'getOne', 'create', 'update', 'remove'],
+    'should have required controller methods'
+  );
+  t.end();
+});
+
+testWrapper('manual: getRoutes ', function (t) {
+  t.doesNotThrow(function () {
+    manual.getRoutes = getItReady.getRoutes(manual.getControllers, 'persons', 'person');
+  } , 'should not throw error');
+  t.ok(manual.getRoutes, 'should return routes collection');
+  t.equal( manual.getRoutes.length, 5, 'should have desired number of routes');
+  var methods = ['GET', 'POST', 'PUT', 'DELETE']
+  for (var i = manual.getRoutes.length - 1; i >= 0; i--) {
+    var index = methods.indexOf(manual.getRoutes[i].method);
+    t.ok( index >= 0, 'should have a valid HTTP method');
+    t.ok(manual.getRoutes[i].path.match('/persons'), 'should have a valid HTTP method');
+    //vrey  brittle and crude way to test path, may be enhanced later
+    if( i < 4 && i > 0 ){
+      t.ok(manual.getRoutes[i].path.match('/persons/{id}'), 'should have good path for '+methods[index]);
+    }
+  }
+
   t.end();
 });
