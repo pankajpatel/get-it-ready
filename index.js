@@ -3,6 +3,7 @@
 var Mongoose = require('mongoose');
 var Joi = require('joi');
 var Boom = require('boom');
+var Hoek = require('hoek');
 
 var Schema = Mongoose.Schema;
 var ObjectID = Schema.ObjectId;
@@ -18,21 +19,10 @@ var ObjectID = Schema.ObjectId;
  */
 function decorate(schemaDefination, routeBaseName, modelName, singularRouteName){
 
-  if( schemaDefination === undefined ){
-    throw new Error('Schema Defination is required');
-  }
-
-  if( routeBaseName === undefined ){
-    throw new Error('Route Base Name is required');
-  }
-
-  if( modelName === undefined ){
-    throw new Error('Model Name is required');
-  }
-
-  if( singularRouteName === undefined ){
-    throw new Error('Singular Model\'s Route Name is required');
-  }
+  Hoek.assert(schemaDefination, 'Schema Defination is required');
+  Hoek.assert(routeBaseName, 'Route Base Name is required');
+  Hoek.assert(modelName, 'Model Name is required');
+  Hoek.assert(singularRouteName, 'Singular Model\'s Route Name is required');
 
   var validations = {}
   var schema = null;
@@ -195,11 +185,10 @@ function getControllers(model, joiValidationObject){
     },
     remove: {
       handler: function(request, reply) {
-        model.findOne({
+        model.findOneAndRemove({
           '_id': ObjectID(request.params.id)
-        }, function(err, dbObject) {
-          if (!err && dbObject) {
-            dbObject.remove();
+        }, function(err) {
+          if (!err) {
             reply({
               message: singularRouteName + ' deleted successfully'
             });
@@ -251,8 +240,8 @@ function getRoutes(controllers, routeBaseName, singularRouteName){
       path : '/' + routeBaseName + '/{id}',
       config: {
         validate: controllers.create.validate,
-        description: 'Add a ' + singularRouteName,
-        notes: 'Returns a todo item by the id passed in the path',
+        description: 'Update a ' + singularRouteName,
+        notes: 'Returns a ' + singularRouteName + ' by the id passed in the path',
         tags: ['api', routeBaseName],
       },
       handler : controllers.create.handler
@@ -273,7 +262,7 @@ function getRoutes(controllers, routeBaseName, singularRouteName){
       config: {
         validate: controllers.create.validate,
         description: 'Add a ' + singularRouteName,
-        notes: 'Returns a todo item by the id passed in the path',
+        notes: 'Returns a ' + singularRouteName + ' by the id passed in the path',
         tags: ['api', routeBaseName],
       },
       handler : controllers.create.handler

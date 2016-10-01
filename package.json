@@ -1,6 +1,6 @@
 {
   "name": "get-it-ready",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Generate Joi Validation, Mongoose Model and basic API endpoint routes for hapijs",
   "main": "index.js",
   "repository": {
@@ -28,6 +28,7 @@
   "homepage": "https://github.com/pankajpatel/get-it-ready#readme",
   "dependencies": {
     "boom": "^4.0.0",
+    "hoek": "^4.1.0",
     "joi": "^9.0.4",
     "mongoose": "^4.6.0"
   },
