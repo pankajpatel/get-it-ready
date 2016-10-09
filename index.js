@@ -15,9 +15,10 @@ var ObjectID = Schema.ObjectId;
  * @param  {string} routeBaseName Route base in plurals
  * @param  {string} modelName Model name
  * @param  {string} singularRouteName Route base in singular
+ * @param  {object} db The Mongoose connection object
  * @return {object} Collection object containing ingredients of REST
  */
-function decorate(schemaDefination, routeBaseName, modelName, singularRouteName){
+function decorate(schemaDefination, routeBaseName, modelName, singularRouteName, db){
 
   Hoek.assert(schemaDefination, 'Schema Defination is required');
   Hoek.assert(routeBaseName, 'Route Base Name is required');
@@ -276,10 +277,14 @@ function getRoutes(controllers, routeBaseName, singularRouteName){
  * @name getModel
  * @param  {string} modelName The Mongoose Model name
  * @param  {object} schema The Mongoose Schema object
+ * @param  {object} db The Mongoose DB object, if pased, use this otherwise use Mongoose
  * @return {object} model The Mongoose model
  */
-function getModel(modelName, schema){
-  return Mongoose.model(modelName, schema);
+function getModel(modelName, schema, db){
+  if( db === undefined ){
+    db = Mongoose;
+  }
+  return db.model(modelName, schema);
 }
 
 /**
