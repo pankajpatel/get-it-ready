@@ -33,7 +33,7 @@ function decorate(schemaDefination, routeBaseName, modelName, singularRouteName,
 
   validations = separateJoiValidationObject(schemaDefination);
   schema = getSchema(validations.schema);
-  model = getModel(modelName, schema);
+  model = getModel(modelName, schema, db);
   controllers = getControllers(model, validations);
   routes = getRoutes(controllers, routeBaseName, singularRouteName);
 
