@@ -89,6 +89,7 @@ For manual opration of this lib, the order of execution of methods is very impor
 * `getModel`
   * @param  {string} _modelName_ The Mongoose Model name
   * @param  {object} _schema_ The Mongoose Schema object
+  * @param  {object} _db_ The Mongoose DB object, if pased, use this otherwise use Mongoose
   * @return {object} model The Mongoose model
 * `getControllers`
   * @param  {object} _model_ The Mongoose model object
