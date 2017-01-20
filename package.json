@@ -1,6 +1,6 @@
 {
   "name": "get-it-ready",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Generate Joi Validation, Mongoose Model and basic API endpoint routes for hapijs",
   "main": "index.js",
   "repository": {
@@ -33,6 +33,7 @@
     "mongoose": "^4.6.0"
   },
   "devDependencies": {
+    "mongo-mock": "^2.1.0",
     "tap-summary": "^3.0.1",
     "tape": "^4.6.0"
   }

@@ -1,12 +1,12 @@
 'use strict';
 
-var Mongoose = require('mongoose');
-var Joi = require('joi');
-var Boom = require('boom');
-var Hoek = require('hoek');
+const Mongoose = require('mongoose');
+const Joi = require('joi');
+const Boom = require('boom');
+const Hoek = require('hoek');
 
-var Schema = Mongoose.Schema;
-var ObjectID = Schema.ObjectId;
+const Schema = Mongoose.Schema;
+const ObjectID = Schema.ObjectId;
 
 /**
  * @function
@@ -25,16 +25,16 @@ function decorate(schemaDefination, routeBaseName, modelName, singularRouteName,
   Hoek.assert(modelName, 'Model Name is required');
   Hoek.assert(singularRouteName, 'Singular Model\'s Route Name is required');
 
-  var validations = {}
-  var schema = null;
-  var model = null;
-  var controllers = {};
-  var routes = [];
+  let validations = {}
+  let schema = null;
+  let model = null;
+  let controllers = {};
+  let routes = [];
 
   validations = separateJoiValidationObject(schemaDefination);
   schema = getSchema(validations.schema);
   model = getModel(modelName, schema, db);
-  controllers = getControllers(model, validations);
+  controllers = getControllers(model, validations, singularRouteName);
   routes = getRoutes(controllers, routeBaseName, singularRouteName);
 
   return {
@@ -71,10 +71,10 @@ decorate.getRoutes = getRoutes;
  * @return {object}
  */
 function separateJoiValidationObject(config){
-  var post = {}, put = {};
-  var schema = Object.assign({}, config);
-  for (var prop in schema) {
-    var itemConf = schema[prop];
+  let post = {}, put = {};
+  let schema = Object.assign({}, config);
+  for (let prop in schema) {
+    let itemConf = schema[prop];
     if ( itemConf === null ) {
       throw new Error('Null configs are not supported!');
     }
@@ -105,8 +105,8 @@ function separateJoiValidationObject(config){
  * @param  {object} joiValidationObject The Joi validation objects
  * @return {object} object containing controller methods
  */
-function getControllers(model, joiValidationObject){
-  var controllers = {
+function getControllers(model, joiValidationObject, singularRouteName){
+  let controllers = {
     getAll: {
       handler: function(request, reply) {
         model.find({}, function(err, data) {
@@ -136,9 +136,9 @@ function getControllers(model, joiValidationObject){
         payload: joiValidationObject.post
       },
       handler: function(request, reply) {
-        var payload = request.payload;
+        let payload = request.payload;
 
-        var object = new model(payload);
+        let object = new model(payload);
 
         object.save(function(err, data) {
           if (!err) {
@@ -163,7 +163,7 @@ function getControllers(model, joiValidationObject){
           '_id': request.params.id
         }, function(err, dbObject) {
           if (!err) {
-            for (var prop in request.payload) {
+            for (let prop in request.payload) {
               dbObject[prop] = request.payload[prop];
             }
 
@@ -215,7 +215,7 @@ function getControllers(model, joiValidationObject){
  * @return {object} The routes object which can be plugged in hapijs or can be extended more
  */
 function getRoutes(controllers, routeBaseName, singularRouteName){
-  var routes = [
+  let routes = [
     {
       method : 'GET',
       path : '/' + routeBaseName,
