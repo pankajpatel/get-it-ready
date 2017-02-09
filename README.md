@@ -4,7 +4,11 @@ Generate Joi Validation, Mongoose Model and basic API endpoint routes for hapijs
 
 ## Inspiration
 
-While doing hapijs app with mongoose, there was a problem with Mongoose schemas and Joi validations; they were most of the times same. And the REST API was surely going to have few predefined routes; why not have a constructor to do all this at once. 
+While doing hapijs app with mongoose, there was a problem with Mongoose schemas and Joi validations; they were most of the times same. And the REST API was surely going to have few predefined routes; why not have a constructor to do all this at once.
+
+![Let me wrap it for ya!](http://i.giphy.com/107vXbGSNNMakg.gif "Let me wrap it for ya!")
+
+----
 
 Once constructor will bridge the problem of multiple configurations for Mongoose and Joi. And also quicky return the controller methods and Routes to easily plug into Hapijs app.
 
@@ -15,13 +19,13 @@ This lib can be used to generate the schema, model, necessary controllers and ro
 Few restrictions:
 * Mongoose models and schemas can/will be used
 * Output controllers and routes are for Hapijs
-* Controllers are named as 
+* Controllers are named as
   * getAll
   * getOne
   * create
   * update
   * remove
-* Routes 
+* Routes
   * GET all
   * GET one
   * POST one
@@ -48,25 +52,25 @@ var Joi = require('joi');
 var getItReady = require('get-it-ready');
 
 var personDefinition = {
-  name: { 
-    type: String, 
-    required: true 
+  name: {
+    type: String,
+    required: true
   },
-  firstName: { 
-    type: String, 
-    required: true, 
-    joi: Joi.string() 
+  firstName: {
+    type: String,
+    required: true,
+    joi: Joi.string()
   },
-  lastName: { 
-    type: String, 
-    required: true, 
-    joi: Joi.string() 
+  lastName: {
+    type: String,
+    required: true,
+    joi: Joi.string()
   },
-  createdOn: { 
-    type: Date, 
-    required: false, 
-    default: Date.now, 
-    joi: Joi.date() 
+  createdOn: {
+    type: Date,
+    required: false,
+    default: Date.now,
+    joi: Joi.date()
   }
 };
 
@@ -79,7 +83,7 @@ See above code in action at [https://runkit.com/pankaj/get-it-ready](https://run
 
 ### Manual
 
-For manual opration of this lib, the order of execution of methods is very important. The order of execution should be 
+For manual opration of this lib, the order of execution of methods is very important. The order of execution should be
 * `separateJoiValidationObject`
   * @param  {object} _config_ The mixture of Schema Config and Joi config object
   * @return {object}
@@ -108,21 +112,21 @@ var Joi = require('joi');
 var getItReady = require('get-it-ready');
 
 var personDefinition = {
-  firstName: { 
-    type: String, 
-    required: true, 
-    joi: Joi.string() 
+  firstName: {
+    type: String,
+    required: true,
+    joi: Joi.string()
   },
-  lastName: { 
-    type: String, 
-    required: true, 
-    joi: Joi.string() 
+  lastName: {
+    type: String,
+    required: true,
+    joi: Joi.string()
   },
-  createdOn: { 
-    type: Date, 
-    required: false, 
-    default: Date.now, 
-    joi: Joi.date() 
+  createdOn: {
+    type: Date,
+    required: false,
+    default: Date.now,
+    joi: Joi.date()
   }
 };
 
