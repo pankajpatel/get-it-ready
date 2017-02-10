@@ -2,6 +2,8 @@
 
 Generate Joi Validation, Mongoose Model and basic API endpoint routes for hapijs
 
+[![Code Climate](https://lima.codeclimate.com/github/pankajpatel/get-it-ready/badges/gpa.svg)](https://lima.codeclimate.com/github/pankajpatel/get-it-ready) [![Test Coverage](https://lima.codeclimate.com/github/pankajpatel/get-it-ready/badges/coverage.svg)](https://lima.codeclimate.com/github/pankajpatel/get-it-ready/coverage) [![Issue Count](https://lima.codeclimate.com/github/pankajpatel/get-it-ready/badges/issue_count.svg)](https://lima.codeclimate.com/github/pankajpatel/get-it-ready)
+
 ## Inspiration
 
 While doing hapijs app with mongoose, there was a problem with Mongoose schemas and Joi validations; they were most of the times same. And the REST API was surely going to have few predefined routes; why not have a constructor to do all this at once.

@@ -74,11 +74,10 @@ function separateJoiValidationObject(config){
   let post = {}, put = {};
   let schema = Object.assign({}, config);
   for (let prop in schema) {
-    let itemConf = schema[prop];
-    if ( itemConf === null ) {
+    if ( schema[prop] === null ) {
       throw new Error('Null configs are not supported!');
-    }
-    if( itemConf.joi ){
+    } else if( schema[prop].joi ){
+      let itemConf = schema[prop];
       if( !itemConf.joi.isJoi ){
         itemConf.joi = Joi.object(itemConf.joi);
       }
@@ -164,7 +163,9 @@ function getControllers(model, joiValidationObject, singularRouteName){
         }, function(err, dbObject) {
           if (!err) {
             for (let prop in request.payload) {
-              dbObject[prop] = request.payload[prop];
+              if(request.payload[prop]){
+                dbObject[prop] = request.payload[prop];
+              }
             }
 
             dbObject.save(function(err, data) {
@@ -222,7 +223,7 @@ function getRoutes(controllers, routeBaseName, singularRouteName){
       config: {
         description: 'Get all ' + routeBaseName + '',
         notes: 'Returns a list of ' + routeBaseName + ' ordered by addition date',
-        tags: ['api', routeBaseName],
+        tags: ['api', routeBaseName]
       },
       handler : controllers.getAll.handler
     },
@@ -232,7 +233,7 @@ function getRoutes(controllers, routeBaseName, singularRouteName){
       config: {
         description: 'Get ' + singularRouteName + ' by DB Id',
         notes: 'Returns the ' + singularRouteName + ' object if matched with the DB id',
-        tags: ['api', routeBaseName],
+        tags: ['api', routeBaseName]
       },
       handler : controllers.getOne.handler
     },
@@ -240,12 +241,12 @@ function getRoutes(controllers, routeBaseName, singularRouteName){
       method : 'PUT',
       path : '/' + routeBaseName + '/{id}',
       config: {
-        validate: controllers.create.validate,
+        validate: controllers.update.validate,
         description: 'Update a ' + singularRouteName,
         notes: 'Returns a ' + singularRouteName + ' by the id passed in the path',
-        tags: ['api', routeBaseName],
+        tags: ['api', routeBaseName]
       },
-      handler : controllers.create.handler
+      handler : controllers.update.handler
     },
     {
       method : 'DELETE',
@@ -253,7 +254,7 @@ function getRoutes(controllers, routeBaseName, singularRouteName){
       config: {
         description: 'Delete ' + singularRouteName,
         notes: 'Returns the ' + singularRouteName + ' deletion status',
-        tags: ['api', routeBaseName],
+        tags: ['api', routeBaseName]
       },
       handler : controllers.remove.handler
     },
@@ -264,7 +265,7 @@ function getRoutes(controllers, routeBaseName, singularRouteName){
         validate: controllers.create.validate,
         description: 'Add a ' + singularRouteName,
         notes: 'Returns a ' + singularRouteName + ' by the id passed in the path',
-        tags: ['api', routeBaseName],
+        tags: ['api', routeBaseName]
       },
       handler : controllers.create.handler
     }
