@@ -1,9 +1,11 @@
-var test = require('tape');
-var Joi = require('joi');
-var Mongoose = require('mongoose');
-var getItReady = require('./index');
+const test = require('tape');
+const Joi = require('joi');
+const Mongoose = require('mongoose');
+const getItReady = require('./index');
 
-var automaticSchemaDefinition = {
+
+
+const automaticSchemaDefinition = {
   name: { type: String, required: false, joi: Joi.string() },
   firstName: { type: String, required: true, joi: Joi.string() },
   lastName: { type: String, required: true, joi: Joi.string() },
@@ -11,13 +13,14 @@ var automaticSchemaDefinition = {
   photo: { type: String, required: false, joi: Joi.string() },
   createdOn: { type: Date, required: false, default: Date.now, joi: Joi.date() }
 };
-var manualSchemaDefinition = {
+const manualSchemaDefinition = {
   firstName: { type: String, required: true, joi: Joi.string() },
   lastName: { type: String, required: true, joi: Joi.string() },
   createdOn: { type: Date, required: false, default: Date.now, joi: Joi.date() }
 };
-var result = null;
-var manual = {};
+
+let result = null;
+let manual = {};
 
 function teardown(){
   Mongoose.connection.close()
