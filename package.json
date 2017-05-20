@@ -30,7 +30,8 @@
     "boom": "^4.0.0",
     "hoek": "^4.1.0",
     "joi": "^9.0.4",
-    "mongoose": "^4.6.0"
+    "mongoose": "^4.6.0",
+    "pluralize": "^5.0.0"
   },
   "devDependencies": {
     "mongo-mock": "^2.1.0",

@@ -2,6 +2,7 @@ const Mongoose = require('mongoose');
 const Joi = require('joi');
 const Boom = require('boom');
 const Hoek = require('hoek');
+const pluralize = require('pluralize');
 
 const Schema = Mongoose.Schema;
 const ObjectID = Schema.ObjectId;
@@ -21,13 +22,16 @@ function decorate(schemaDefination, routeBaseName, modelName, singularRouteName,
   Hoek.assert(schemaDefination, 'Schema Defination is required');
   Hoek.assert(routeBaseName, 'Route Base Name is required');
   Hoek.assert(modelName, 'Model Name is required');
-  Hoek.assert(singularRouteName, 'Singular Model\'s Route Name is required');
 
   let validations = {}
   let schema = null;
   let model = null;
   let controllers = {};
   let routes = [];
+
+  if(!singularRouteName) {
+    singularRouteName = pluralize.singular(routeBaseName);
+  }
 
   validations = separateJoiValidationObject(schemaDefination);
   schema = getSchema(validations.schema);
