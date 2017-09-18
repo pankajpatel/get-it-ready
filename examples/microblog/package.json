@@ -1,0 +1,21 @@
+{
+  "name": "microblog",
+  "private": true,
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "hapi": "^16.5.2",
+    "hapi-swagger": "^7.7.1",
+    "inert": "^4.2.1",
+    "joi": "^10.6.0",
+    "mongoose": "^4.11.10",
+    "vision": "^4.1.1"
+  }
+}

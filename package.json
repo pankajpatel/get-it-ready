@@ -31,9 +31,12 @@
     "hoek": "^4.1.0",
     "joi": "^9.0.4",
     "mongoose": "^4.6.0",
-    "pluralize": "^5.0.0"
+    "pluralize": "^5.1.0"
   },
   "devDependencies": {
+    "eslint": "^4.6.1",
+    "eslint-config-airbnb-base": "^12.0.0",
+    "eslint-plugin-import": "^2.7.0",
     "mongo-mock": "^2.1.0",
     "tap-summary": "^3.0.1",
     "tape": "^4.6.0"
