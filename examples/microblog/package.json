@@ -11,6 +11,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "boom": "^5.2.0",
     "hapi": "^16.5.2",
     "hapi-swagger": "^7.7.1",
     "inert": "^4.2.1",

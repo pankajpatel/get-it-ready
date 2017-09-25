@@ -8,20 +8,6 @@ server.connection({
   port: Number(process.argv[2]) || 8080,
 });
 
-server.register([
-  require('inert'),
-  require('vision'),
-  {
-    register: require('hapi-swagger'),
-    options: {
-      info: {
-        title: 'API Documentation',
-        version: '0.1.0',
-      },
-    },
-  },
-]);
-
 // Add the route
 server.route({
   method: 'GET',
@@ -38,7 +24,7 @@ const post = require('./models/post');
 
 // patch the artefacts to server routes
 server.route(
-  [].concat(person.routes, post.routes)
+  [].concat(person.routes, post.routes),
 );
 // done.
 
